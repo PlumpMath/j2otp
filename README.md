@@ -1,4 +1,4 @@
-java-erlang
+j2top
 ===========
 
-java interacts with erlang 
+java interacts with otp erlang 
