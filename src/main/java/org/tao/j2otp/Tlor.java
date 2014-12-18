@@ -66,11 +66,11 @@ public final class Tlor {
             c.sendRPC(mod, fn, args);
             final OtpErlangObject r = c.receive(options.timeout());
             System.out.println("\n#resource:" + c.hashCode());
-            pool.returnResource(c);
             return (r);
         } catch (final Exception e) {
-            pool.returnBrokenResource(c);
             System.out.println(e);
+        } finally {
+            pool.returnResource(c);
         }
 
         return (null);

@@ -20,16 +20,21 @@ public final class OtpConnectionPool extends Pool<OtpConnection> {
         return (c);
     }
 
-    public void returnBrokenResource(final OtpConnection resource) {
-        if (resource != null) {
+    public void returnResource(final OtpConnection resource) {
+        if (null == resource) {
+            return;
+        }
+
+        if (resource.isInterrupted()) {
+            returnBrokenResource(resource);
+        } else {
             returnBrokenResourceObject(resource);
         }
     }
 
-    public void returnResource(final OtpConnection resource) {
+    public final void returnBrokenResource(final OtpConnection resource) {
         if (resource != null) {
-//            resource.resetState();
-            returnResourceObject(resource);
+            returnBrokenResourceObject(resource);
         }
     }
 
