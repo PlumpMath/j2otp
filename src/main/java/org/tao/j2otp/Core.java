@@ -7,12 +7,109 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.System.out;
-import static java.lang.System.setOut;
 
 /**
  * Created by junjie on 12/16/14.
  */
 public final class Core {
+    private static final Map<String, TlorRunnable> _ins =
+            new HashMap<String, TlorRunnable>() {
+                {
+                    put(Tlor.INS_INFO, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final TlorResponse r = t.info(t.options().argument(0)/*code*/);
+                            return (r);
+                        }
+                    });
+                }
+
+                {
+                    put(Tlor.INS_SAY_TO, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.say_to(o.user(), o.password(),
+                                    o.argument(0), /* who */
+                                    o.argument(1)); /* what */
+                            return (r);
+                        }
+                    });
+                }
+
+                {
+                    put(Tlor.INS_PUBLISH, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.publish(o.user(), o.password(),
+                                    o.argument(0), /* node */
+                                    o.argument(1), /* type */
+                                    o.argument(2)); /* subject */
+                            return (r);
+                        }
+                    });
+                }
+
+                {
+                    put(Tlor.INS_DELETE_NODE, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.delete_node(o.user(), o.password(),
+                                    o.argument(0));
+                            return (r);
+                        }
+                    });
+                }
+
+                {
+                    put(Tlor.INS_CREATE_NODE, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.create_node(o.user(), o.password(),
+                                    o.argument(0));
+                            return (r);
+                        }
+                    });
+                }
+
+                {
+                    put(Tlor.INS_DISCO_INFO, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.disco_info(o.user(), o.password());
+                            return (r);
+                        }
+                    });
+                }
+
+                {
+                    put(Tlor.INS_DISCO_INFO, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.disco_info(o.user(), o.password(),
+                                    o.argument(0) /* node */);
+                            return (r);
+                        }
+                    });
+                }
+
+                {
+                    put(Tlor.INS_REGISTER, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.register(o.user(), o.password());
+                            return (r);
+                        }
+                    });
+                }
+            };
+
     public static void main(String[] args) {
         if (args.length < 2) {
             _help();
@@ -135,95 +232,4 @@ public final class Core {
         final TlorResponse r = _ins.get(ins).call(tlor);
         return (r);
     }
-
-    private static final Map<String, TlorRunnable> _ins =
-            new HashMap<String, TlorRunnable>() {
-                {
-                    put(Tlor.INS_INFO, new TlorRunnable() {
-                        @Override
-                        TlorResponse call(Tlor t) {
-                            final TlorResponse r = t.info(t.options().argument(0)/*code*/);
-                            return (r);
-                        }
-                    });
-                }
-                {
-                    put(Tlor.INS_SAY_TO, new TlorRunnable() {
-                        @Override
-                        TlorResponse call(Tlor t) {
-                            final Options o = t.options();
-                            final TlorResponse r = t.say_to(o.user(), o.password(),
-                                    o.argument(0), /* who */
-                                    o.argument(1)); /* what */
-                            return (r);
-                        }
-                    });
-                }
-                {
-                    put(Tlor.INS_PUBLISH, new TlorRunnable() {
-                        @Override
-                        TlorResponse call(Tlor t) {
-                            final Options o = t.options();
-                            final TlorResponse r = t.publish(o.user(), o.password(),
-                                    o.argument(0), /* node */
-                                    o.argument(1), /* type */
-                                    o.argument(2)); /* subject */
-                            return (r);
-                        }
-                    });
-                }
-                {
-                    put(Tlor.INS_DELETE_NODE, new TlorRunnable() {
-                        @Override
-                        TlorResponse call(Tlor t) {
-                            final Options o = t.options();
-                            final TlorResponse r = t.delete_node(o.user(), o.password(),
-                                    o.argument(0));
-                            return (r);
-                        }
-                    });
-                }
-                {
-                    put(Tlor.INS_CREATE_NODE, new TlorRunnable() {
-                        @Override
-                        TlorResponse call(Tlor t) {
-                            final Options o = t.options();
-                            final TlorResponse r = t.create_node(o.user(), o.password(),
-                                    o.argument(0));
-                            return (r);
-                        }
-                    });
-                }
-                {
-                    put(Tlor.INS_DISCO_INFO, new TlorRunnable() {
-                        @Override
-                        TlorResponse call(Tlor t) {
-                            final Options o = t.options();
-                            final TlorResponse r = t.disco_info(o.user(), o.password());
-                            return (r);
-                        }
-                    });
-                }
-                {
-                    put(Tlor.INS_DISCO_INFO, new TlorRunnable() {
-                        @Override
-                        TlorResponse call(Tlor t) {
-                            final Options o = t.options();
-                            final TlorResponse r = t.disco_info(o.user(), o.password(),
-                                    o.argument(0) /* node */);
-                            return (r);
-                        }
-                    });
-                }
-                {
-                    put(Tlor.INS_REGISTER, new TlorRunnable() {
-                        @Override
-                        TlorResponse call(Tlor t) {
-                            final Options o = t.options();
-                            final TlorResponse r = t.register(o.user(), o.password());
-                            return (r);
-                        }
-                    });
-                }
-            };
 }

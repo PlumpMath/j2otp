@@ -13,6 +13,8 @@ import sun.reflect.generics.reflectiveObjects.NotImplementedException;
  */
 public final class OtpConnectionFactory implements PooledObjectFactory<OtpConnection> {
 
+    private final Options _options;
+
     public OtpConnectionFactory(final Options options) {
         _options = options;
     }
@@ -60,8 +62,6 @@ public final class OtpConnectionFactory implements PooledObjectFactory<OtpConnec
         }
 
 
-
-
 //        t.connect();
 //        if (null != this.password) {
 //            t.auth(this.password);
@@ -96,6 +96,4 @@ public final class OtpConnectionFactory implements PooledObjectFactory<OtpConnec
 //        }
 
     }
-
-    private final Options _options;
 }

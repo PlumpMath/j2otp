@@ -1,7 +1,5 @@
 package org.tao.j2otp;
 
-import javax.swing.text.html.Option;
-
 /**
  * Created by junjie on 12/22/14.
  */

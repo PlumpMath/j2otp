@@ -9,6 +9,16 @@ import java.util.regex.Pattern;
  * Created by junjie on 12/16/14.
  */
 public final class Options {
+    private static final Pattern _SPLIT_NODES = Pattern.compile("\\s*:\\s*");
+    private final List<String> _nodes;
+    private final String _cookie;
+    private final int _retry;
+    private final int _timeout;
+    private final String _user;
+    private final String _password;
+    private final String _ins;
+    private final List<String> _arguments;
+
     public Options(final String nodes, final String cookie, int retry, int timeout,
                    final String user, final String password, final String ins,
                    final String arguments) {
@@ -22,6 +32,14 @@ public final class Options {
         _ins = ins;
         final String[] a = _split_colon_string(arguments);
         _arguments = new UnmodifiableArrayList<String>(a, a.length);
+    }
+
+    private static final String[] _split_colon_string(final String s) {
+        if (null == s) {
+            return (H.EMPTY_STR_ARRAY);
+        }
+        final String[] n = _SPLIT_NODES.split(s);
+        return (n);
     }
 
     public final String client() {
@@ -74,25 +92,6 @@ public final class Options {
 
         return (_arguments.get(i));
     }
-
-    private static final String[] _split_colon_string(final String s) {
-        if (null == s) {
-            return (H.EMPTY_STR_ARRAY);
-        }
-        final String[] n = _SPLIT_NODES.split(s);
-        return (n);
-    }
-
-    private final List<String> _nodes;
-    private final String _cookie;
-    private final int _retry;
-    private final int _timeout;
-    private final String _user;
-    private final String _password;
-    private final String _ins;
-    private final List<String> _arguments;
-
-    private static final Pattern _SPLIT_NODES = Pattern.compile("\\s*:\\s*");
 
     @Override
     public String toString() {

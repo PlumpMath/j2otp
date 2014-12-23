@@ -7,6 +7,7 @@ import junit.framework.TestCase;
  */
 public class Benchmark extends TestCase {
     protected Tlor _tlor = null;
+    protected boolean _debug = false;
 
     @Override
     public void setUp() throws Exception {
@@ -16,6 +17,8 @@ public class Benchmark extends TestCase {
     }
 
     public void test_publish_64() {
+        if (!_debug) return;
+
         final Options o = _tlor.options();
         final String s = _workload_512().toString();
         for (int i = 0; i < 32; i++) {

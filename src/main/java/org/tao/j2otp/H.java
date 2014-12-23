@@ -7,9 +7,10 @@ import java.net.UnknownHostException;
  * Created by junjie on 12/17/14.
  */
 public final class H {
-    private H() {}
-
     public static final String[] EMPTY_STR_ARRAY = new String[]{};
+
+    private H() {
+    }
 
     public static final String pad_right(final String s, final int length, final String c) {
         if (is_null_or_empty(s) || is_non_negative(s.length() - length) || is_null_or_empty(c)) {
@@ -56,7 +57,7 @@ public final class H {
             return (s);
         }
 
-        final StringBuilder b = new StringBuilder(s.length()*c);
+        final StringBuilder b = new StringBuilder(s.length() * c);
         for (int i = 0; i < c; i++) {
             b.append(s);
         }

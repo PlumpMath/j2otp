@@ -9,6 +9,8 @@ import org.apache.commons.pool2.impl.GenericObjectPoolConfig;
  */
 public abstract class Pool<T> {
 
+    protected GenericObjectPool<T> _pool;
+
     public Pool() {
     }
 
@@ -75,6 +77,4 @@ public abstract class Pool<T> {
             System.out.println(e);
         }
     }
-
-    protected GenericObjectPool<T> _pool;
 }

@@ -1,11 +1,6 @@
 package org.tao.j2otp;
 
 import junit.framework.TestCase;
-import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by junjie on 12/22/14.
@@ -23,8 +18,7 @@ public class SingleTlorNode extends TestCase {
 
     public void test_info() throws Exception {
         final String code = "Hell@";
-
-        TlorResponse r = _tlor.info("Hell@");
+        TlorResponse r = _tlor.info(code);
         assertTrue(r.raw(), r.status());
     }
 
@@ -44,4 +38,19 @@ public class SingleTlorNode extends TestCase {
         assertTrue(r.raw(), r.status());
     }
 
+    public void test_delete_node() throws Exception {
+        final Options o = _tlor.options();
+        TlorResponse r = _tlor.delete_node(o.user(), o.password(),
+                "/home/xwtec.im/newspub/news");
+        System.out.println(r.raw());
+        assertTrue(r.raw(), r.status());
+    }
+
+    public void test_create_node() throws Exception {
+        final Options o = _tlor.options();
+        TlorResponse r = _tlor.create_node(o.user(), o.password(),
+                "/home/xwtec.im/newspub/news");
+        System.out.println(r.raw());
+        assertTrue(r.raw(), r.status());
+    }
 }
