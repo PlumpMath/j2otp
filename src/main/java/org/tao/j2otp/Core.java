@@ -3,6 +3,9 @@ package org.tao.j2otp;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import static java.lang.System.out;
 
 /**
@@ -21,9 +24,13 @@ public final class Core {
                 new LongOpt("cookie", LongOpt.REQUIRED_ARGUMENT, null, 'c'),
                 new LongOpt("retry", LongOpt.OPTIONAL_ARGUMENT, null, 'r'),
                 new LongOpt("timeout", LongOpt.REQUIRED_ARGUMENT, null, 't'),
+                new LongOpt("user", LongOpt.REQUIRED_ARGUMENT, null, 'u'),
+                new LongOpt("password", LongOpt.REQUIRED_ARGUMENT, null, 'p'),
+                new LongOpt("args", LongOpt.REQUIRED_ARGUMENT, null, 'a'),
+                new LongOpt("ins", LongOpt.REQUIRED_ARGUMENT, null, 'i')
         };
 
-        final Getopt g = new Getopt("j2otp", args, "hn:c:r:t:;", opts);
+        final Getopt g = new Getopt("j2otp", args, "hn:c:r:t:u:p:i:a:;", opts);
         g.setOpterr(true);
         int c;
 
@@ -31,6 +38,10 @@ public final class Core {
         String cookie = null;
         int retry = 3;
         int timeout = 500;
+        String user = null;
+        String password = null;
+        String ins = null;
+        String arguments = null;
 
         while ((c = g.getopt()) != -1)
             switch (c) {
@@ -48,6 +59,18 @@ public final class Core {
                     final int t = _parse_int(g.getOptarg(), timeout);
                     timeout = (t > 0 ? t : timeout);
                     break;
+                case 'u':
+                    user = g.getOptarg();
+                    break;
+                case 'p':
+                    password = g.getOptarg();
+                    break;
+                case 'i':
+                    ins = g.getOptarg();
+                    break;
+                case 'a':
+                    arguments = g.getOptarg();
+                    break;
                 case 'h':
                     _help();
                     break;
@@ -61,17 +84,15 @@ public final class Core {
                     break;
             }
 
-        final Options options = new Options(nodes, cookie, retry, timeout);
+        final Options options = new Options(nodes, cookie, retry, timeout,
+                user, password, ins, arguments);
         out.println(H.pad_right("OPTIONS:", 40, "="));
         out.println(options);
-        out.println();
         out.print(H.pad_right("REQUEST:", 40, "="));
-        out.format("\ninfo");
-        out.format("\nsayto");
+        out.format("\n%s:%s", options.ins(), options.arguments());
         out.format("\n%s", H.pad_right("RESPONSE:", 40, "="));
         final Tlor tlor = new Tlor(options);
-        out.format("\n%s", tlor.info("Hell@"));
-        out.format("\n%s", tlor.say_to("newspub@xwtec.im", "Welc0me", "beta@xwtec.im", "say hello"));
+        out.format("\n%s", _call(tlor));
     }
 
     private static final void _help() {
@@ -98,4 +119,52 @@ public final class Core {
 
         return (d);
     }
+
+    private static final TlorResponse _call(final Tlor tlor) {
+        final String ins = tlor.options().ins();
+        if (!_ins.containsKey(ins)) {
+            return (null);
+        }
+
+        final TlorResponse r = _ins.get(ins).call(tlor);
+        return (r);
+    }
+
+    private static final Map<String, TlorRunnable> _ins =
+            new HashMap<String, TlorRunnable>() {
+                {
+                    put(Tlor.INS_INFO, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final TlorResponse r = t.info(t.options().argument(0)/*code*/);
+                            return (r);
+                        }
+                    });
+                }
+                {
+                    put(Tlor.INS_SAY_TO, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.say_to(o.user(), o.password(),
+                                    o.argument(0), /* who */
+                                    o.argument(1)); /* what */
+                            return (r);
+                        }
+                    });
+                }
+                {
+                    put(Tlor.INS_PUBLISH, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.publish(o.user(), o.password(),
+                                    o.argument(0), /* node */
+                                    o.argument(1), /* type */
+                                    o.argument(2)); /* subject */
+                            return (r);
+                        }
+                    });
+                }
+            };
 }

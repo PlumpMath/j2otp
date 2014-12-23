@@ -7,7 +7,7 @@ import com.ericsson.otp.erlang.OtpErlangString;
 /**
  * Created by junjie on 12/16/14.
  */
-public final class Tlor {
+public class Tlor {
 
     public Tlor(final Options options) {
         this(options, new OtpConnectionPoolConfig());
@@ -17,7 +17,11 @@ public final class Tlor {
         _pool = new OtpConnectionPool(config, _options = options);
     }
 
-    public final String info(final String code) {
+    public final Options options() {
+        return (_options);
+    }
+
+    public final TlorResponse info(final String code) {
         if (H.is_null_or_empty(code)) {
             return (null);
         }
@@ -26,11 +30,13 @@ public final class Tlor {
           new OtpErlangString(code)
         };
 
-        final OtpErlangObject ret = _rpc_call(_pool, _options, _M_GANDALF, "info", i);
-        return (ret.toString());
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_GANDALF,
+                INS_INFO, i);
+        final TlorResponse r = TlorResponse.decode(o);
+        return (r);
     }
 
-    public final OtpErlangObject say_to(final String who, final String password, final String whom, final String what) {
+    public final TlorResponse say_to(final String who, final String password, final String whom, final String what) {
         if (H.is_null_or_empty(who) || H.is_null_or_empty(password)
                 || H.is_null_or_empty(who) || H.is_null_or_empty(what)) {
             return (null);
@@ -42,10 +48,43 @@ public final class Tlor {
                 new OtpErlangString(whom),
                 new OtpErlangString(what)
         };
-        final OtpErlangObject ret = _rpc_call(_pool, _options, _M_GANDALF, "sayto", s);
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_GANDALF,
+                INS_SAY_TO, s);
+        final TlorResponse r = TlorResponse.decode(o);
 
-        return (ret);
+        return (r);
     }
+
+    public final TlorResponse publish(final String who,
+                                      final String password,
+                                      final String node,
+                                      final String type,
+                                      final String subject ) {
+        if (H.is_null_or_empty(who) || H.is_null_or_empty(password)
+                || H.is_null_or_empty(node) || H.is_null_or_empty(type)
+                || H.is_null_or_empty(type) || H.is_null_or_empty(subject)) {
+            return (null);
+        }
+
+        final OtpErlangObject[] s = new OtpErlangObject[] {
+                new OtpErlangString(who),
+                new OtpErlangString(password),
+                new OtpErlangString(node),
+                new OtpErlangString(type),
+                new OtpErlangString(subject)
+        };
+
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_GANDALF,
+                INS_PUBLISH, s);
+        final TlorResponse r = TlorResponse.decode(o);
+
+        return (r);
+    }
+
+    public static final String INS_INFO = "info";
+    public static final String INS_SAY_TO = "say_to";
+    public static final String INS_PUBLISH = "publish";
+
 
     private static final OtpErlangObject _rpc_call(
             final OtpConnectionPool pool,
@@ -65,7 +104,6 @@ public final class Tlor {
         try {
             c.sendRPC(mod, fn, args);
             final OtpErlangObject r = c.receive(options.timeout());
-            System.out.println("\n#resource:" + c.hashCode());
             return (r);
         } catch (final Exception e) {
             System.out.println(e);
