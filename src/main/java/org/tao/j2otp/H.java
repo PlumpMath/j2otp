@@ -9,6 +9,8 @@ import java.net.UnknownHostException;
 public final class H {
     private H() {}
 
+    public static final String[] EMPTY_STR_ARRAY = new String[]{};
+
     public static final String pad_right(final String s, final int length, final String c) {
         if (is_null_or_empty(s) || is_non_negative(s.length() - length) || is_null_or_empty(c)) {
             return (s);
@@ -61,4 +63,5 @@ public final class H {
 
         return (b.toString());
     }
+
 }

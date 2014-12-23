@@ -75,8 +75,11 @@ public final class Options {
         return (_arguments.get(i));
     }
 
-    private static final String[] _split_colon_string(final String nodes) {
-        final String[] n = _SPLIT_NODES.split(nodes);
+    private static final String[] _split_colon_string(final String s) {
+        if (null == s) {
+            return (H.EMPTY_STR_ARRAY);
+        }
+        final String[] n = _SPLIT_NODES.split(s);
         return (n);
     }
 

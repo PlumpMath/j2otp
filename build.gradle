@@ -25,7 +25,7 @@ jar {
     }
 }
 
-task uberjar(type: Jar, dependsOn:jar/*,dependsOn:[':compileJava',':compileGroovy'*/) {
+task uberjar(type: Jar, dependsOn:jar/*, dependsOn:[':compileJava',':compileGroovy']*/) {
     from files(sourceSets.main.output.classesDir)
     from configurations.runtime.asFileTree.files.collect { zipTree(it) }
     exclude "META-INF/*.SF"
@@ -34,7 +34,7 @@ task uberjar(type: Jar, dependsOn:jar/*,dependsOn:[':compileJava',':compileGroov
     manifest {
         attributes(
                 'Create-By': System.getProperty('java.version'),
-                'Main-Class': 'com.xw.push.Core',
+                'Main-Class': 'org.tao.j2otp.Core',
                 'Build-Version': jar_version(),
                 'Build-Date': new Date()
         )

@@ -81,10 +81,110 @@ public class Tlor {
         return (r);
     }
 
+    public final TlorResponse delete_node(final String who,
+                                          final String password,
+                                          final String node) {
+        if (H.is_null_or_empty(who) || H.is_null_or_empty(password)
+                || H.is_null_or_empty(node)) {
+            return (null);
+        }
+
+        final OtpErlangObject[] s = new OtpErlangObject[] {
+                new OtpErlangString(who),
+                new OtpErlangString(password),
+                new OtpErlangString(node)
+        };
+
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_HOBBIT,
+                INS_DELETE_NODE, s);
+        final TlorResponse r = TlorResponse.decode(o);
+
+        return (r);
+    }
+
+    public final TlorResponse create_node(final String who,
+                                          final String password,
+                                          final String node) {
+        if (H.is_null_or_empty(who) || H.is_null_or_empty(password)
+                || H.is_null_or_empty(node)) {
+            return (null);
+        }
+
+        final OtpErlangObject[] s = new OtpErlangObject[] {
+                new OtpErlangString(who),
+                new OtpErlangString(password),
+                new OtpErlangString(node)
+        };
+
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_HOBBIT,
+                INS_CREATE_NODE, s);
+        final TlorResponse r = TlorResponse.decode(o);
+
+        return (r);
+    }
+
+    public final TlorResponse disco_info(final String who, final String password) {
+        if (H.is_null_or_empty(who) || H.is_null_or_empty(password)) {
+            return (null);
+        }
+
+        final OtpErlangObject[] s = new OtpErlangObject[] {
+                new OtpErlangString(who),
+                new OtpErlangString(password)
+        };
+
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_HOBBIT,
+                INS_DISCO_INFO, s);
+        final TlorResponse r = TlorResponse.decode(o);
+
+        return (r);
+    }
+
+    public final TlorResponse disco_info(final String who,
+                                          final String password,
+                                          final String node) {
+        if (H.is_null_or_empty(who) || H.is_null_or_empty(password)
+                || H.is_null_or_empty(node)) {
+            return (null);
+        }
+
+        final OtpErlangObject[] s = new OtpErlangObject[] {
+                new OtpErlangString(who),
+                new OtpErlangString(password),
+                new OtpErlangString(node)
+        };
+
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_HOBBIT,
+                INS_DISCO_INFO, s);
+        final TlorResponse r = TlorResponse.decode(o);
+
+        return (r);
+    }
+
+    public final TlorResponse register(final String who, final String password) {
+        if (H.is_null_or_empty(who) || H.is_null_or_empty(password)) {
+            return (null);
+        }
+
+        final OtpErlangObject[] s = new OtpErlangObject[] {
+                new OtpErlangString(who),
+                new OtpErlangString(password),
+        };
+
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_GANDALF,
+                INS_REGISTER, s);
+        final TlorResponse r = TlorResponse.decode(o);
+
+        return (r);
+    }
+
     public static final String INS_INFO = "info";
     public static final String INS_SAY_TO = "say_to";
     public static final String INS_PUBLISH = "publish";
-
+    public static final String INS_DELETE_NODE = "delete_node";
+    public static final String INS_CREATE_NODE = "create_node";
+    public static final String INS_DISCO_INFO = "disco_info";
+    public static final String INS_REGISTER = "register";
 
     private static final OtpErlangObject _rpc_call(
             final OtpConnectionPool pool,
