@@ -19,6 +19,10 @@ public final class Options {
     private final String _ins;
     private final List<String> _arguments;
 
+    public Options(final String nodes, final String cookie) {
+        this(nodes, cookie, 3, 500, null, null, null, null);
+    }
+
     public Options(final String nodes, final String cookie, int retry, int timeout,
                    final String user, final String password, final String ins,
                    final String arguments) {

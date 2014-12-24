@@ -110,6 +110,30 @@ public final class Core {
                         }
                     });
                 }
+
+                {
+                    put(Tlor.INS_SUBSCRIBE, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.subscribe(o.user(), o.password(),
+                                    o.argument(0)/* node */);
+                            return (r);
+                        }
+                    });
+                }
+
+                {
+                    put(Tlor.INS_UNSUBSCRIBE, new TlorRunnable() {
+                        @Override
+                        TlorResponse call(Tlor t) {
+                            final Options o = t.options();
+                            final TlorResponse r = t.unsubscribe(o.user(), o.password());
+                            return (r);
+                        }
+                    });
+                }
+
             };
 
     public static void main(String[] args) {

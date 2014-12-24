@@ -16,6 +16,8 @@ public class Tlor {
     public static final String INS_CREATE_NODE = "create_node";
     public static final String INS_DISCO_INFO = "disco_info";
     public static final String INS_REGISTER = "register";
+    public static final String INS_SUBSCRIBE = "subscribe";
+    public static final String INS_UNSUBSCRIBE = "unsubscribe";
     private static final String _M_GANDALF = "gandalf";
     private static final String _M_HOBBIT = "hobbit";
     private final OtpConnectionPool _pool;
@@ -219,6 +221,45 @@ public class Tlor {
 
         final OtpErlangObject o = _rpc_call(_pool, _options, _M_GANDALF,
                 INS_REGISTER, s);
+        final TlorResponse r = TlorResponse.decode(o);
+
+        return (r);
+    }
+
+    public final TlorResponse subscribe(final String who,
+                                          final String password,
+                                          final String node) {
+        if (H.is_null_or_empty(who) || H.is_null_or_empty(password)
+                || H.is_null_or_empty(node)) {
+            return (null);
+        }
+
+        final OtpErlangObject[] s = new OtpErlangObject[]{
+                new OtpErlangString(who),
+                new OtpErlangString(password),
+                new OtpErlangString(node)
+        };
+
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_GANDALF,
+                INS_SUBSCRIBE, s);
+        final TlorResponse r = TlorResponse.decode(o);
+
+        return (r);
+    }
+
+    public final TlorResponse unsubscribe(final String who,
+                                        final String password) {
+        if (H.is_null_or_empty(who) || H.is_null_or_empty(password)) {
+            return (null);
+        }
+
+        final OtpErlangObject[] s = new OtpErlangObject[]{
+                new OtpErlangString(who),
+                new OtpErlangString(password)
+        };
+
+        final OtpErlangObject o = _rpc_call(_pool, _options, _M_GANDALF,
+                INS_UNSUBSCRIBE, s);
         final TlorResponse r = TlorResponse.decode(o);
 
         return (r);
