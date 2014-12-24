@@ -57,6 +57,12 @@ public class Tlor {
         return (null);
     }
 
+    public final void close() {
+        if (null != _pool) {
+            _pool.destroy();
+        }
+    }
+
     public final Options options() {
         return (_options);
     }

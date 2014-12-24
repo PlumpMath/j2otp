@@ -93,10 +93,19 @@ public final class Options {
         return (_arguments.get(i));
     }
 
+    public final String logger_config() {
+        return (System.getProperty("log4j.configurationFile"));
+    }
+
     @Override
     public String toString() {
-        final String s = String.format("Options@%d:{\n\t%s,\n\t%s,\n\t%s,\n\t%s,\n\t%s,\n\t%s,\n\t%s,\n\t%s\n}",
-                this.hashCode(), _nodes, _cookie, _retry, _timeout, _user, _password, _ins, _arguments);
+        final String s = String.format("Options@%d:{" +
+                        "\n\tnodes:%s," + "\n\tcookie:%s," +
+                        "\n\tretry:%s,\n\ttimeout:%s,\n\tuser:%s,\n\tpassword:%s," +
+                        "\n\tins:%s,\n\targs:%s,\n\tlogger:%s\n}",
+                this.hashCode(), _nodes, _cookie,
+                _retry, _timeout, _user, _password,
+                _ins, _arguments, logger_config());
         return (s);
     }
 }

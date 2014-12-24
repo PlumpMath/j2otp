@@ -12,8 +12,11 @@ public class Benchmark extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        _tlor = new Tlor(new Options("tlor@192.168.4.11", "abc", 3, 500,
-                "newspub@xwtec.im", "Welc0me", "", "a:b:c"));
+        if (_debug) {
+            _tlor = new Tlor(new Options("tlor@192.168.4.11:tlor@192.168.21.168",
+                    "abc", 3, 500,
+                    "newspub@xwtec.im", "Welc0me", "", "a:b:c"));
+        }
     }
 
     public void test_publish_64() {
@@ -21,10 +24,10 @@ public class Benchmark extends TestCase {
 
         final Options o = _tlor.options();
         final String s = _workload_512().toString();
-        for (int i = 0; i < 32; i++) {
+        for (int i = 0; i < 4; i++) {
             TlorResponse r = _tlor.publish(o.user(), o.password(),
                     "/home/xwtec.im/newspub/news", "*BENCHMARK*", s);
-            System.out.println(r.raw());
+            assertNotNull("r is null", r);
             assertTrue(r.raw(), r.status());
         }
     }
@@ -37,4 +40,5 @@ public class Benchmark extends TestCase {
         }
         return (buffer);
     }
+
 }

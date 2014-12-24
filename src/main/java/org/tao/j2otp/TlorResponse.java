@@ -2,11 +2,19 @@ package org.tao.j2otp;
 
 import com.ericsson.otp.erlang.OtpErlangObject;
 import com.ericsson.otp.erlang.OtpErlangTuple;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by junjie on 12/22/14.
  */
 public final class TlorResponse {
+
+    private static final Logger _out = LogManager.getLogger(TlorResponse.class);
+    private final boolean _status;
+    private final String _module;
+    private final String _info;
+    private final String _raw;
 
     private TlorResponse() {
         this("!response-failed");
@@ -61,6 +69,48 @@ public final class TlorResponse {
         return (new TlorResponse(d.toString()));
     }
 
+    private static final String _decode_status(final OtpErlangTuple t, final int i) {
+        final OtpErlangObject first = t.elementAt(i);
+        final OtpErlangTuple d = _from(first);
+        if (null == d) {
+            return (first.toString());
+        }
+
+        final OtpErlangObject status = d.elementAt(0);
+
+        return (status.toString());
+    }
+
+    private static final OtpErlangTuple _from(final OtpErlangObject o) {
+        if (null == o) {
+            return (null);
+        }
+
+        if (!(o instanceof OtpErlangTuple)) {
+            return (null);
+        }
+
+        final OtpErlangTuple t = (OtpErlangTuple) o;
+        return (t);
+    }
+
+    private static final String _to_str(final OtpErlangTuple t, final int i) {
+        if (null == t || i < 0 || i >= t.arity()) {
+            return (null);
+        }
+
+        final OtpErlangObject o = t.elementAt(i);
+        return (o.toString());
+    }
+
+    private static final boolean _to_bool(final String s) {
+        if (H.is_null_or_empty(s)) {
+            return (false);
+        }
+
+        return (s.equals("ok") ? true : false);
+    }
+
     public final String raw() {
         return (_raw);
     }
@@ -83,52 +133,4 @@ public final class TlorResponse {
                 this.hashCode(), _raw);
         return (s);
     }
-
-    private static final String _decode_status(final OtpErlangTuple t, final int i) {
-        final OtpErlangObject first = t.elementAt(i);
-        final OtpErlangTuple d = _from(first);
-        if (null == d) {
-            return (first.toString());
-        }
-
-        final OtpErlangObject status = d.elementAt(0);
-
-        return (status.toString());
-    }
-
-    private static final OtpErlangTuple _from(final OtpErlangObject o) {
-        if (null == o) {
-            return (null);
-        }
-
-        if (!(o instanceof OtpErlangTuple)) {
-            return (null);
-        }
-
-        final OtpErlangTuple t = (OtpErlangTuple)o;
-        return (t);
-    }
-
-    private static final String _to_str(final OtpErlangTuple t, final int i) {
-        if (null == t || i < 0 || i >= t.arity()) {
-            return (null);
-        }
-
-        final OtpErlangObject o = t.elementAt(i);
-        return (o.toString());
-    }
-
-    private static final boolean _to_bool(final String s) {
-        if (H.is_null_or_empty(s)) {
-            return (false);
-        }
-
-        return (s.equals("ok") ? true : false);
-    }
-
-    private final boolean _status;
-    private final String _module;
-    private final String _info;
-    private final String _raw;
-
 }

@@ -9,9 +9,14 @@ repositories {
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
+    testCompile 'org.apache.logging.log4j:log4j-api:2.1'
+    testCompile 'org.apache.logging.log4j:log4j-core:2.1'
+
     compile 'gnu.getopt:java-getopt:1.0.13'
     compile 'org.erlang.otp:jinterface:1.5.6'
     compile 'org.apache.commons:commons-pool2:2.2'
+    compile 'org.apache.logging.log4j:log4j-api:2.1'
+    compile 'org.apache.logging.log4j:log4j-core:2.1'
 }
 
 jar {

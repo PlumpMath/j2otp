@@ -2,6 +2,7 @@ package org.tao.j2otp;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.List;
 
 /**
  * Created by junjie on 12/17/14.
@@ -32,6 +33,21 @@ public final class H {
         return (null == s || s.length() == 0);
     }
 
+    public static final <T> boolean is_null_or_empty(final T[] array) {
+        if (null == array || array.length == 0) {
+            return (true);
+        }
+
+        return (false);
+    }
+
+    public static final <T> boolean is_null_or_empty(final List<T> list) {
+        if (null == list || list.size() == 0) {
+            return (true);
+        }
+        return (false);
+    }
+
     public static final String host_name() {
         try {
             InetAddress ip = InetAddress.getLocalHost();
@@ -42,6 +58,11 @@ public final class H {
         }
 
         return (null);
+    }
+
+    public static final <T> String format(Class<T> clazz, final String arg) {
+        final String s = String.format("%s::%s", clazz.getSimpleName(), arg);
+        return (s);
     }
 
 //    private static final boolean is_positive(final int n) {

@@ -2,16 +2,18 @@ package org.tao.j2otp;
 
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static java.lang.System.out;
 
 /**
  * Created by junjie on 12/16/14.
  */
 public final class Core {
+    private static final Logger _out = LogManager.getLogger(Core.class);
+
     private static final Map<String, TlorRunnable> _ins =
             new HashMap<String, TlorRunnable>() {
                 {
@@ -184,13 +186,14 @@ public final class Core {
 
         final Options options = new Options(nodes, cookie, retry, timeout,
                 user, password, ins, arguments);
-        out.println(H.pad_right("OPTIONS:", 40, "="));
-        out.println(options);
-        out.print(H.pad_right("REQUEST:", 40, "="));
-        out.format("\n%s:%s", options.ins(), options.arguments());
-        out.format("\n%s", H.pad_right("RESPONSE:", 40, "="));
+        _out.info(H.pad_right("OPTIONS:", 40, "="));
+        _out.info(options);
+        _out.info(H.pad_right("REQUEST:", 40, "="));
+        _out.info(String.format("%s:%s", options.ins(), options.arguments()));
+        _out.info(String.format("%s", H.pad_right("RESPONSE:", 40, "=")));
         final Tlor tlor = new Tlor(options);
-        out.format("\n%s", _call(tlor));
+        _out.info(String.format("%s", _call(tlor)));
+        tlor.close();
     }
 
     private static final void _help() {
@@ -199,17 +202,18 @@ public final class Core {
 
     private static final void _help(final String m) {
         if (null != m) {
-            out.println(m);
+            _out.info(m);
         }
-        out.println("j2otp [-n|--nodes] [-r|--retry] [-t|--timeout]");
-        out.println("\t--nodes: otp nodes, split via ':'");
-        out.println("\t--cookie: otp cookie");
-        out.println("\t--retry: otp retry times, default is 3");
-        out.println("\t--timeout: otp timeout, default 500ms");
-        out.println("\t--user: user name, username@domain.im");
-        out.println("\t--password: password");
-        out.println("\t--ins: instruction's name");
-        out.println("\t--args: instruction's arguments");
+
+        _out.info("j2otp [-n|--nodes] [-r|--retry] [-t|--timeout]");
+        _out.info("\t--nodes: otp nodes, split via ':'");
+        _out.info("\t--cookie: otp cookie");
+        _out.info("\t--retry: otp retry times, default is 3");
+        _out.info("\t--timeout: otp timeout, default 500ms");
+        _out.info("\t--user: user name, username@domain.im");
+        _out.info("\t--password: password");
+        _out.info("\t--ins: instruction's name");
+        _out.info("\t--args: instruction's arguments");
     }
 
     private static int _parse_int(final String s, final int d) {
@@ -217,7 +221,7 @@ public final class Core {
             final int i = Integer.parseInt(s);
             return (i);
         } catch (final NumberFormatException e) {
-            out.println(e);
+            _out.error(e);
         }
 
         return (d);
