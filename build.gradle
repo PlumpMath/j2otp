@@ -32,6 +32,9 @@ jar {
 
 task uberjar(type: Jar, dependsOn:jar/*, dependsOn:[':compileJava',':compileGroovy']*/) {
     from files(sourceSets.main.output.classesDir)
+    // just copy log4j2.xml to classpath,
+    // or u can specify it with -D log4j.configurationFile=<log4j2.xml-path>
+    from 'src/main/resources'
     from configurations.runtime.asFileTree.files.collect { zipTree(it) }
     exclude "META-INF/*.SF"
     exclude "META-INF/*.RSA"

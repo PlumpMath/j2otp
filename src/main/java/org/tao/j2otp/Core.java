@@ -137,6 +137,9 @@ public final class Core {
             };
 
     public static void main(String[] args) {
+//        final Map<?, ?> env = System.getenv();
+//        System.out.println(env);
+//        System.out.println(env.get("CLASSPATH"));
         if (args.length < 2) {
             _help();
             return;
