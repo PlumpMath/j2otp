@@ -240,7 +240,7 @@ public final class Core {
         _out.info("\t--user: user name, username@domain.im");
         _out.info("\t--password: password");
         _out.info("\t--ins: instruction's name");
-        _out.info("\t--args: instruction's arguments");
+        _out.info("\t--args: instruction's arguments, split via ':'");
     }
 
     private static int _parse_int(final String s, final int d) {
