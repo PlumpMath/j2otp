@@ -232,7 +232,7 @@ public final class Core {
             _out.info(m);
         }
 
-        _out.info("j2otp [-n|--nodes] [-r|--retry] [-t|--timeout]");
+        _out.info("j2otp [-n|--nodes] [-r|--retry] [-t|--timeout] [-i|--ins] [-a|--args]");
         _out.info("\t--nodes: otp nodes, split via ':'");
         _out.info("\t--cookie: otp cookie");
         _out.info("\t--retry: otp retry times, default is 3");

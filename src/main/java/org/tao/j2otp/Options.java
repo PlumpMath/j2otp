@@ -1,7 +1,8 @@
 package org.tao.j2otp;
 
-import com.sun.javafx.UnmodifiableArrayList;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -27,7 +28,7 @@ public final class Options {
                    final String user, final String password, final String ins,
                    final String arguments) {
         final String[] n = _split_colon_string(nodes);
-        _nodes = new UnmodifiableArrayList<String>(n, n.length);
+        _nodes = Collections.unmodifiableList(Arrays.asList(n));
         _cookie = cookie;
         _retry = retry;
         _timeout = timeout;
@@ -35,7 +36,7 @@ public final class Options {
         _password = password;
         _ins = ins;
         final String[] a = _split_colon_string(arguments);
-        _arguments = new UnmodifiableArrayList<String>(a, a.length);
+        _arguments = Collections.unmodifiableList(Arrays.asList(a));
     }
 
     private static final String[] _split_colon_string(final String s) {
@@ -47,7 +48,7 @@ public final class Options {
     }
 
     public final String client() {
-        final String c = "j2otp@192.168.21.168";
+        final String c = String.format("j2otp@%s", H.host_name());
         return (c);
     }
 
@@ -104,10 +105,10 @@ public final class Options {
     @Override
     public String toString() {
         final String s = String.format("Options@%d:{" +
-                        "\n\tnodes:%s," + "\n\tcookie:%s," +
+                        "\n\tnodes:%s," + "\n\tcookie:%s," + "\n\tclient:%s" +
                         "\n\tretry:%s,\n\ttimeout:%s,\n\tuser:%s,\n\tpassword:%s," +
                         "\n\tins:%s,\n\targs:%s,\n\tlogger:%s\n}",
-                this.hashCode(), _nodes, _cookie,
+                this.hashCode(), _nodes, _cookie, client(),
                 _retry, _timeout, _user, _password,
                 _ins, _arguments, logger_config());
         return (s);

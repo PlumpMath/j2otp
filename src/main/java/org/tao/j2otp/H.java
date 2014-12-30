@@ -3,6 +3,8 @@ package org.tao.j2otp;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.List;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by junjie on 12/17/14.
@@ -23,7 +25,7 @@ public final class H {
             return (s);
         }
 
-        final String p = repeat(c, Math.floorDiv(d, c.length()));
+        final String p = repeat(c, _floor_div(d, c.length()));
         final String t = s.concat(p);
 
         return (t);
@@ -54,7 +56,7 @@ public final class H {
             final String n = ip.getHostName();
             return (n);
         } catch (final UnknownHostException e) {
-            System.out.println(e);
+            _out.error(e);
         }
 
         return (null);
@@ -86,4 +88,14 @@ public final class H {
         return (b.toString());
     }
 
+    private static final int _floor_div(int x, int y) {
+        int r = x / y;
+        // if the signs are different and modulo not zero, round down
+        if ((x ^ y) < 0 && (r * y != x)) {
+            r--;
+        }
+        return (r);
+    }
+
+    private static final Logger _out = LogManager.getLogger(H.class);
 }
