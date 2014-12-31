@@ -1,6 +1,9 @@
 package org.tao.j2otp;
 
 
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -11,6 +14,8 @@ import java.util.regex.Pattern;
  */
 public final class Options {
     private static final Pattern _SPLIT_NODES = Pattern.compile("\\s*:\\s*");
+    private static final Type _type = new TypeToken<Options>() {
+    }.getType();
     private final List<String> _nodes;
     private final String _cookie;
     private final int _retry;
@@ -19,10 +24,12 @@ public final class Options {
     private final String _password;
     private final String _ins;
     private final List<String> _arguments;
+    private static final String _CLIENT = String.format("j2otp@%s", H.to_lowercase(H.host_name()));
 
     public Options(final String nodes, final String cookie) {
         this(nodes, cookie, 3, 500, null, null, null, null);
     }
+
 
     public Options(final String nodes, final String cookie, int retry, int timeout,
                    final String user, final String password, final String ins,
@@ -39,6 +46,22 @@ public final class Options {
         _arguments = Collections.unmodifiableList(Arrays.asList(a));
     }
 
+    public static final Options read(final String conf) {
+        final String j = H.read_file(conf);
+        if (H.is_null_or_empty(j)) {
+            return (null);
+        }
+
+        final Options c = H.from_json(j, _type);
+        return (c);
+    }
+
+
+    public static final void save(final Options options, final String conf) {
+        final String j = H.to_json(options, _type);
+        H.write_file(j, conf);
+    }
+
     private static final String[] _split_colon_string(final String s) {
         if (null == s) {
             return (H.EMPTY_STR_ARRAY);
@@ -48,8 +71,7 @@ public final class Options {
     }
 
     public final String client() {
-        final String c = String.format("j2otp@%s", H.host_name());
-        return (c);
+        return (_CLIENT);
     }
 
     public final List<String> nodes() {
@@ -99,18 +121,20 @@ public final class Options {
     }
 
     public final String logger_config() {
-        return (System.getProperty("log4j.configurationFile"));
+        return (A.LOG4J_CONFIG_PROPERTY);
     }
 
     @Override
     public String toString() {
-        final String s = String.format("Options@%d:{" +
-                        "\n\tnodes:%s," + "\n\tcookie:%s," + "\n\tclient:%s" +
-                        "\n\tretry:%s,\n\ttimeout:%s,\n\tuser:%s,\n\tpassword:%s," +
-                        "\n\tins:%s,\n\targs:%s,\n\tlogger:%s\n}",
-                this.hashCode(), _nodes, _cookie, client(),
-                _retry, _timeout, _user, _password,
-                _ins, _arguments, logger_config());
+        final String s = H.to_json(this, _type);
+        save(this, A.OPTIONS_CONFIG_FILE);
+//        final String s = String.format("Options@%d:{" +
+//                        "\n\tnodes:%s," + "\n\tcookie:%s," + "\n\tclient:%s" +
+//                        "\n\tretry:%s,\n\ttimeout:%s,\n\tuser:%s,\n\tpassword:%s," +
+//                        "\n\tins:%s,\n\targs:%s,\n\tlogger:%s\n}",
+//                this.hashCode(), _nodes, _cookie, client(),
+//                _retry, _timeout, _user, _password,
+//                _ins, _arguments, logger_config());
         return (s);
     }
 }

@@ -1,16 +1,30 @@
 package org.tao.j2otp;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.List;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSyntaxException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.List;
 
 /**
  * Created by junjie on 12/17/14.
  */
 public final class H {
     public static final String[] EMPTY_STR_ARRAY = new String[]{};
+    private static final Charset chars = Charset.forName("UTF-8");
+
+    private static final Logger _out = LogManager.getLogger(H.class);
 
     private H() {
     }
@@ -50,6 +64,14 @@ public final class H {
         return (false);
     }
 
+    public static final String to_lowercase(final String s) {
+        if (is_null_or_empty(s)) {
+            return (s);
+        }
+
+        return (s.toLowerCase());
+    }
+
     public static final String host_name() {
         try {
             InetAddress ip = InetAddress.getLocalHost();
@@ -67,9 +89,57 @@ public final class H {
         return (s);
     }
 
-//    private static final boolean is_positive(final int n) {
-//        return (n > 0);
-//    }
+    public static <T> T from_json(final String json, final Type type) {
+        if (H.is_null_or_empty(json) || null == type) {
+            return (null);
+        }
+
+        final Gson gson = new Gson();
+        try {
+            final T t = gson.fromJson(json, type);
+            return (t);
+        } catch (JsonSyntaxException e) {
+            _out.error(e);
+        } catch (JsonParseException e) {
+            _out.error(e);
+        }
+
+        return (null);
+    }
+
+    public static <T> String to_json(final T t, final Type type) {
+        if (null == t) {
+            return (null);
+        }
+
+        final Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        final String j = gson.toJson(t, type);
+
+        return (j);
+    }
+
+    public static String read_file(final String file) {
+        byte[] b = null;
+        try {
+            b = Files.readAllBytes(Paths.get(file));
+        } catch (IOException e) {
+            _out.error(e);
+            return (null);
+        }
+
+        final String s = new String(b);
+        return (s);
+    }
+
+    public static void write_file(final String json, final String file) {
+        try {
+            Files.write(Paths.get(file), json.getBytes(chars),
+                    StandardOpenOption.CREATE,
+                    StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            _out.error(e);
+        }
+    }
 
     private static final boolean is_non_negative(final int n) {
         return (n >= 0);
@@ -96,6 +166,4 @@ public final class H {
         }
         return (r);
     }
-
-    private static final Logger _out = LogManager.getLogger(H.class);
 }

@@ -137,16 +137,14 @@ public final class Core {
             };
 
     public static void main(String[] args) {
-//        final Map<?, ?> env = System.getenv();
-//        System.out.println(env);
-//        System.out.println(env.get("CLASSPATH"));
-        if (args.length < 2) {
+        if (args.length < 1) {
             _help();
             return;
         }
 
         final LongOpt[] opts = new LongOpt[]{
                 new LongOpt("help", LongOpt.NO_ARGUMENT, null, 'h'),
+                new LongOpt("config", LongOpt.OPTIONAL_ARGUMENT, null, 'f'),
                 new LongOpt("nodes", LongOpt.REQUIRED_ARGUMENT, null, 'n'),
                 new LongOpt("cookie", LongOpt.REQUIRED_ARGUMENT, null, 'c'),
                 new LongOpt("retry", LongOpt.OPTIONAL_ARGUMENT, null, 'r'),
@@ -157,10 +155,11 @@ public final class Core {
                 new LongOpt("ins", LongOpt.REQUIRED_ARGUMENT, null, 'i')
         };
 
-        final Getopt g = new Getopt("j2otp", args, "hn:c:r:t:u:p:i:a:;", opts);
+        final Getopt g = new Getopt("j2otp", args, "hf:n:c:r:t:u:p:i:a:;", opts);
         g.setOpterr(true);
         int c;
 
+        String config = null;
         String nodes = null;
         String cookie = null;
         int retry = 3;
@@ -172,6 +171,9 @@ public final class Core {
 
         while ((c = g.getopt()) != -1)
             switch (c) {
+                case 'f':
+                    config = g.getOptarg();
+                    break;
                 case 'n':
                     nodes = g.getOptarg();
                     break;
@@ -211,8 +213,10 @@ public final class Core {
                     break;
             }
 
-        final Options options = new Options(nodes, cookie, retry, timeout,
-                user, password, ins, arguments);
+        final Options options = (!H.is_null_or_empty(config) ?
+                Options.read(config) :
+                new Options(nodes, cookie, retry, timeout,
+                        user, password, ins, arguments));
         _out.info(H.pad_right("OPTIONS:", 40, "="));
         _out.info(options);
         _out.info(H.pad_right("REQUEST:", 40, "="));
@@ -232,7 +236,9 @@ public final class Core {
             _out.info(m);
         }
 
+        _out.info("j2otp [-f|--config]");
         _out.info("j2otp [-n|--nodes] [-r|--retry] [-t|--timeout] [-i|--ins] [-a|--args]");
+        _out.info("\t--config: specify configuration file");
         _out.info("\t--nodes: otp nodes, split via ':'");
         _out.info("\t--cookie: otp cookie");
         _out.info("\t--retry: otp retry times, default is 3");
