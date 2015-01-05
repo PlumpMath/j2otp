@@ -3,6 +3,8 @@ package org.tao.j2otp;
 import com.ericsson.otp.erlang.OtpConnection;
 import com.ericsson.otp.erlang.OtpErlangObject;
 import com.ericsson.otp.erlang.OtpErlangString;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /**
  * Created by junjie on 12/16/14.
@@ -20,6 +22,7 @@ public class Tlor {
     public static final String INS_UNSUBSCRIBE = "unsubscribe";
     private static final String _M_GANDALF = "gandalf";
     private static final String _M_HOBBIT = "hobbit";
+    private static final Logger _out = LogManager.getLogger(Tlor.class);
     private final OtpConnectionPool _pool;
     private final Options _options;
 
@@ -51,7 +54,7 @@ public class Tlor {
             final OtpErlangObject r = c.receive(options.timeout());
             return (r);
         } catch (final Exception e) {
-            System.out.println(e);
+            _out.error(e);
         } finally {
             pool.returnResource(c);
         }
@@ -227,8 +230,8 @@ public class Tlor {
     }
 
     public final TlorResponse subscribe(final String who,
-                                          final String password,
-                                          final String node) {
+                                        final String password,
+                                        final String node) {
         if (H.is_null_or_empty(who) || H.is_null_or_empty(password)
                 || H.is_null_or_empty(node)) {
             return (null);
@@ -248,7 +251,7 @@ public class Tlor {
     }
 
     public final TlorResponse unsubscribe(final String who,
-                                        final String password) {
+                                          final String password) {
         if (H.is_null_or_empty(who) || H.is_null_or_empty(password)) {
             return (null);
         }

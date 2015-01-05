@@ -14,8 +14,8 @@ public class Benchmark extends TestCase {
         super.setUp();
         if (_debug) {
             _tlor = new Tlor(new Options("tlor@192.168.4.11:tlor@192.168.21.168",
-                    "abc", 3, 500,
-                    "newspub@xwtec.im", "Welc0me", "", "a:b:c"));
+                    "abc",
+                    "newspub@xwtec.im", "Welc0me"));
         }
     }
 

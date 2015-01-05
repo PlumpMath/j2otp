@@ -68,7 +68,7 @@ public final class OtpConnectionFactory implements PooledObjectFactory<OtpConnec
 
         try {
             final OtpPeer remote = new OtpPeer(node);
-            final OtpSelf client = new OtpSelf(_options.client(), _options.cookie());
+            final OtpSelf client = new OtpSelf(_options.host(), _options.cookie());
             final OtpConnection c = client.connect(remote);
             return (new DefaultPooledObject<OtpConnection>(c));
         } catch (final Exception e) {

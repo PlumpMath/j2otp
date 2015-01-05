@@ -18,25 +18,28 @@ public final class Options {
     }.getType();
     private final List<String> _nodes;
     private final String _cookie;
+    private final String _host;
     private final int _retry;
     private final int _timeout;
     private final String _user;
     private final String _password;
     private final String _ins;
     private final List<String> _arguments;
-    private static final String _CLIENT = String.format("j2otp@%s", H.to_lowercase(H.host_name()));
 
-    public Options(final String nodes, final String cookie) {
-        this(nodes, cookie, 3, 500, null, null, null, null);
+    public Options(final String nodes, final String cookie,
+                   final String user, final String password) {
+        this(nodes, cookie, null, 3, 500, user, password, null, null);
     }
 
-
-    public Options(final String nodes, final String cookie, int retry, int timeout,
+    public Options(final String nodes, final String cookie, final String host,
+                   int retry, int timeout,
                    final String user, final String password, final String ins,
                    final String arguments) {
         final String[] n = _split_colon_string(nodes);
         _nodes = Collections.unmodifiableList(Arrays.asList(n));
         _cookie = cookie;
+        _host = (H.is_null_or_empty(host)
+                ? String.format("j2otp@%s", H.host_name()):host);
         _retry = retry;
         _timeout = timeout;
         _user = user;
@@ -70,8 +73,8 @@ public final class Options {
         return (n);
     }
 
-    public final String client() {
-        return (_CLIENT);
+    public final String host() {
+        return (_host);
     }
 
     public final List<String> nodes() {
@@ -128,13 +131,6 @@ public final class Options {
     public String toString() {
         final String s = H.to_json(this, _type);
         save(this, A.OPTIONS_CONFIG_FILE);
-//        final String s = String.format("Options@%d:{" +
-//                        "\n\tnodes:%s," + "\n\tcookie:%s," + "\n\tclient:%s" +
-//                        "\n\tretry:%s,\n\ttimeout:%s,\n\tuser:%s,\n\tpassword:%s," +
-//                        "\n\tins:%s,\n\targs:%s,\n\tlogger:%s\n}",
-//                this.hashCode(), _nodes, _cookie, client(),
-//                _retry, _timeout, _user, _password,
-//                _ins, _arguments, logger_config());
         return (s);
     }
 }
