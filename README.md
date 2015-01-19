@@ -1,40 +1,47 @@
 j2otp
 ===========
+Interop with [tlor](https://github.com/junjiemars/tlor) an otp erlang node.
 
-java interacts with otp erlang: tlor which is a small facade of ejabberd.
+## Requirements
+1. JDK1.6+
+2. [gradle 2.1+](https://github.com/gradle/gradle.git)
 
-2 Ways to use it
-===========
+## How to use
+2 ways to use it: one via CLI, another just as general java library.
+As use as java lib, the way is your favor, so I don't say anymore.
 
-ONE: as a CLI command:
-1. java -jar j2otp-<version>.jar [-h]
-2. java -jar j2otp-<version>.jar
---nodes=tlor@k27:tlor@as0
---cookie=abc
---user=newspub@xwtec.im
---password=Welc0me
---ins=publish
---args="/home/xwtec.im/newspub/news:XxX:YyY"
-3. java -jar j2otp-<version>.jar --config=j2otp-options.json
-json format like this:
+### CLI
+1. Use raw gnu-opt style:
+```shell
+java -jar j2otp-<version>.jar \
+--nodes=tlor@abc:tlor@def \
+--cookie=abc \
+--user=newspub@abc.im \
+--password=Welcome \
+--ins=publish \
+--args="/tmp/news:XxX:YyY" 
+```
+2. Via configuration file:
+`java -jar j2otp-<version>.jar --conf=<your-json-file>`
+
+the json configurations like the following:
+```json
 {
   "_nodes": [
-    "tlor@k27",
-    "tlor@as0"
+    "tlor@abc",
+    "tlor@def"
   ],
   "_cookie": "abc",
-  "_client": "j2otp@K27",
+  "_client": "j2otp@abc",
   "_retry": 3,
   "_timeout": 500,
-  "_user": "newspub@xwtec.im",
-  "_password": "Welc0me",
+  "_user": "newspub@abc.im",
+  "_password": "Welcome",
   "_ins": "publish",
   "_arguments": [
-    "/home/xwtec.im/newspub/news",
+    "/tmp/news",
     "XxX",
     "YyY"
   ]
 }
-
-TWO: as a  java Library:
-
+```
