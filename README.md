@@ -9,9 +9,7 @@ Interop with [tlor](https://github.com/junjiemars/tlor) an otp erlang node.
 ## How to use
 2 ways to use it: one via CLI, another just as general java library.
 As use as java lib, the way is your favor, so I don't say anymore.
-
-### CLI
-1. Use raw gnu-opt style:
+1. via raw gnu-opt style:
 ```shell
 java -jar j2otp-<version>.jar \
 --nodes=tlor@abc:tlor@def \
@@ -21,7 +19,7 @@ java -jar j2otp-<version>.jar \
 --ins=publish \
 --args="/tmp/news:XxX:YyY" 
 ```
-2. Via configuration file:
+2. via configuration file:
 `java -jar j2otp-<version>.jar --conf=<your-json-file>`
 
 the json configurations like the following:
